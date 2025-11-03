@@ -35,7 +35,5 @@ It was developed as part of the *AENEXZ Internship* program.
 https://docs.google.com/presentation/d/1M6QJWruSeDeU0I9Kl6kyYnoeZc7ny5FS/edit?usp=drive_link&ouid=102419414850609684188&rtpof=true&sd=true
 
 ---
-
-Developed by *Team – Anup Pattnaik, Gowri Bhat, Momina
 Developed by *Team – Arup Pattnaik, Gowri Bhat, Momina
 🧑‍💻 Internship: AENEXZ Internship
