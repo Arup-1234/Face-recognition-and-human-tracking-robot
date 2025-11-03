@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Detection with OpenCV.js</title>
+  <script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady();"></script>
+  <style>
+    video, canvas {
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align: center;">Face Detection using OpenCV.js</h2>
+  <video id="video" width="640" height="480" autoplay></video>
+  <canvas id="canvas" width="640" height="480"></canvas>
+
+  <script type="text/javascript">
+    let video = document.getElementById('video');
+    let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
+    let src, gray, faceCascade;
+
+    function onOpenCvReady() {
+      console.log("OpenCV.js is ready");
+
+      // Start camera stream
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+          video.srcObject = stream;
+          video.play();
+        })
+        .catch(err => console.log(err));
+
+      // Load the face detection model
+      faceCascade = new cv.CascadeClassifier();
+      let faceCascadeFile = 'haarcascade_frontalface_default.xml';
+      cv.FS_createLazyFile('/', faceCascadeFile, faceCascadeFile, true, false);
+      faceCascade.load(faceCascadeFile);
+    }
+
+    function detectFaces() {
+      if (!faceCascade || video.readyState !== 4) return;
+
+      src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+      gray = new cv.Mat();
+
+      ctx.drawImage(video, 0, 0, video.width, video.height);
+      src.data.set(ctx.getImageData(0, 0, video.width, video.height).data);
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+
+      let faces = new cv.RectVector();
+      let faceSize = new cv.Size(0, 0);
+      faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0, faceSize, faceSize);
+
+      for (let i = 0; i < faces.size(); ++i) {
+        let face = faces.get(i);
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(face.x, face.y, face.width, face.height);
+      }
+
+      src.delete();
+      gray.delete();
+      faces.delete();
+    }
+
+    setInterval(detectFaces, 100);
+  </script>
+</body>
+</html>
