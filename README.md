@@ -15,6 +15,7 @@ It was developed as part of the *AENEXZ Internship* program.
 - OpenCV
 - face_recognition (dlib)
 - NumPy
+- HTML (for camera)
 
 ### 🧠 Working Principle
 1. Capture frame from webcam.
